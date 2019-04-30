@@ -14,24 +14,21 @@ import matplotlib.pyplot as plt
 
 def LR(y):
     x_train, x_test, y_train, y_test = train_test_split(X[:,:4], y, test_size = 0.3)
-    
     model=linreg.fit(x_train, y_train)
-    #print(model.coef_,model.intercept_)
     n_predic_y_test = model.predict(x_test)
-    
     plt.scatter(x_test[:,1],n_predic_y_test , marker='x')
+    
+    #Get the Result
     var=np.mean((n_predic_y_test-y_test)**2)
     error=np.mean(abs(n_predic_y_test-y_test))
     error_percentage=round(error/np.mean(abs(y_test))*100,2)
-    
     return var,error,error_percentage
 if __name__ == '__main__':
     X,y=gen_data(10)
     linreg = LinearRegression()
     for i in range(len(y)):
-    
         print(LR(y[i]))
-    #print(LR(y_big_noise))
+
 '''
 (0.0015366263968832226, 0.029558440011940437, 4.12)
 (0.007524175125879509, 0.06941106394372618, 9.41)

@@ -27,18 +27,6 @@ def AccuarcyCompute(pred,label):
     error=np.mean(abs(pred-label))
     error_percentage=round(error/np.mean(abs(label))*100,2)
     return var,error,error_percentage
-
-
-
-#        #if i % 10 == 0:
-#    return out
-#    print("training:",AccuarcyCompute(outputs,labels))
-#    inputs=pt.from_numpy(x_test)
-#    labels=pt.from_numpy(y_test)
-#    inputs = pt.autograd.Variable(inputs)
-#    labels = pt.autograd.Variable(labels)
-#    outputs = model(inputs.float(),random_effect)
-#    print("Testing",AccuarcyCompute(outputs,labels.float()))
     
 def E_step(sigma_u,sigma_e,Y,Z):
     K=Z.shape[1] 
@@ -59,14 +47,14 @@ def M_step(mu,Sigma,Y,Z):
     sigma_e=sigma_e/len(Z)
     return sigma_u,sigma_e
 def EMNN(y):
+    #pre_set
     sigma_u=1
     sigma_e=1
     x_train, x_test, y_train, y_test, z_train, z_test = train_test_split(Xdata[:,:5], y,Xdata[:,5:], test_size = 0.3)
     model = MLP()
     optimizer = pt.optim.SGD(model.parameters(),lr=0.01,momentum=0.9)
     lossfunc = pt.nn.MSELoss()
-    
-    
+    #training data
     X=x_train
     Y=y_train
     Z=z_train
@@ -86,11 +74,12 @@ def EMNN(y):
             loss.backward()
             optimizer.step()
         return model(inputs.float(),0)
+    
+    #last and repeat is to check whether it shoud stop
     last=0
     repeat=0
     for i in range(50):
         outputs=NN(X,Y,random_effect)
-        
         epochs=5
         for e in range(epochs):
             Random_effect_true=Y-outputs.data.numpy()
@@ -101,13 +90,6 @@ def EMNN(y):
         for j in range(len(Z)):
             z=Z[j]
             p=np.dot(z,mu)
-            #sigma=np.dot(z,Sigma1)
-            #W=np.zeros(2000)
-#            for w in range(2000):
-#                try:
-#                    W[w]=np.random.normal(p, sigma, 1)
-#                except:
-#                    W[w]=p
             random_effect[j]=p
         
         
@@ -115,10 +97,6 @@ def EMNN(y):
         for j in range(len(z_test)):
             z=z_test[j]
             p=np.dot(z,mu)
-#            sigma=np.dot(z,Sigma1)
-#            W=np.zeros(2000)
-#            for w in range(2000):
-#                W[w]=np.random.normal(p, sigma, 1)
             random_effect_test[j]=p
         inputs_test=pt.from_numpy(x_test)
         labels_test=pt.from_numpy(y_test)
@@ -127,7 +105,6 @@ def EMNN(y):
         random_e_test=pt.from_numpy(random_effect_test).float()
         outputs_test = model(inputs_test.float(),random_e_test)
         error_percentage=AccuarcyCompute(outputs_test,labels_test.float())
-        #print("Testing",error_percentage)
         if error_percentage[2]==last:
             repeat+=1
         else:
@@ -136,7 +113,7 @@ def EMNN(y):
             break
     print("Testing",error_percentage)
 if __name__ == '__main__':
-    Xdata,y=gen_data(5,size=3000)
+    Xdata,y=gen_data(5,size=1000)
     Xdata=np.concatenate((np.ones((Xdata.shape[0],1)),Xdata),axis=1).astype(float)
     for i in range(len(y)):
         EMNN(y[i])

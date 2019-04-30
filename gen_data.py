@@ -10,24 +10,25 @@ import numpy as np
 
 
 def gen_data(k=2,size=1000):
+    #k is the number of random effect types
+    #size is the data size
+    #size is 10 time of the number of random factors
+    
     np.random.seed(1)
     x=np.random.random(size)*2
     x=np.reshape(x,(len(x),1))
     b=np.random.normal(size=size)*0.05
     b=np.reshape(b,(len(b),1))
     y=[]
-    num_people=int(size/10)
+    num_factor=int(size/10)#(the number of random factors, it also means the number of people in real data)
+    
     for i in range(k):
-    #y_small_noise=np.sin(x)+b
-    #plt.scatter(x,y_small_noise , marker='x')
-    
-        mu=np.random.normal(loc=0,scale=i/k,size=num_people)
-    
+        mu=np.random.normal(loc=0,scale=i/k,size=num_factor)
         y_noise=np.sin(x[:10])+mu[0]+b[:10]
-        z=np.zeros((size,num_people),dtype=int)
+        z=np.zeros((size,num_factor),dtype=int)
         for i in range(10):
             z[i,0]=1
-        for i in range(1,num_people):
+        for i in range(1,num_factor):
             y_noise_1=np.sin(x[10*i:10*i+10])+mu[i]+b[10*i:10*i+10]
             for j in range(10):
                 z[i*10+j,i]=1

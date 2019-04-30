@@ -67,7 +67,6 @@ def EM(y):
         beta_old,sigma_u,sigma_e=M_step(mu,Sigma1,X,Y,Z)
         if e%10==0:
             pred=prediction(X,beta_old,mu,Sigma1,Z)
-            #print(AccuarcyCompute(pred,Y))
     pred=prediction(x_test,beta_old,mu,Sigma1,z_test)
     plt.scatter(x_test[:,1],pred , marker='x')
     print(AccuarcyCompute(pred,y_test))

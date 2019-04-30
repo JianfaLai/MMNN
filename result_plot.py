@@ -7,6 +7,7 @@ Created on Tue Apr 30 15:54:35 2019
 
 import matplotlib.pyplot as plt
 import numpy as np
+#Error vs random effect
 a=[[0,4.12,5.76,4.97,4.1],
 [1,9.41,10.51,4.6,4.91],
 [2,23.79,25.26,5.58,4.62],
@@ -18,6 +19,17 @@ a=[[0,4.12,5.76,4.97,4.1],
 [8,60.31,60.66,3.09,3.04],
 [9,51.63,52.69,4.18,3.79]]
 a=np.array(a).T
+plt.style.use('fivethirtyeight')
+plt.plot(a[0],a[1],label="Linear Regression")
+plt.plot(a[0],a[2],label="Neural Network")
+plt.plot(a[0],a[3],label="Mixed Model with EM")
+plt.plot(a[0],a[4],label="MMNN with EM")
+plt.legend()
+plt.xlabel('Random Effect')
+plt.ylabel('Error percentage(%)')
+plt.show()
+
+#Error vs # of random factors
 b=[[6.01,6.06,6.31,6.31],
 [6.08,6.07,9.66,17.13],
 [5.88,5.7,16.84,31.99],
@@ -25,13 +37,13 @@ b=[[6.01,6.06,6.31,6.31],
 [6.11,5.99,21.19,41.98]
 ]
 b=np.array(b).T
-#plt.style.use('fivethirtyeight')
-plt.plot(a[0],a[1],label="Linear Regression")
-
-plt.plot(a[0],a[2],label="Neural Network")
-plt.plot(a[0],a[3],label="Mixed Model with EM")
-plt.plot(a[0],a[4],label="MMNN with EM")
+name=["1000","3000","5000","8000","10000"]
+plt.style.use('fivethirtyeight')
+plt.plot(name,b[0],label="MMNN_low_random_effect")
+plt.plot(name,b[1],label="MMNN_high_random_effect")
+plt.plot(name,b[2],label="Neural Network_low_random_effect")
+plt.plot(name,b[3],label="Neural Network_high_random_effect")
 plt.legend()
-plt.xlabel('Random Effect')
+plt.xlabel('the number of random factors')
 plt.ylabel('Error percentage(%)')
 plt.show()
